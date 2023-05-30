@@ -10,6 +10,11 @@ pub fn disassemble_chunk(chunk : &Chunk, name : &str) {
 
 pub fn disassemble_instruction(chunk : &Chunk, offset : usize) -> usize {
     print!("{offset} ");
+    if offset > 0 && chunk.lines[offset] == chunk.lines[offset - 1] {
+        print!("    | ");
+    } else {
+        print!("{} ", chunk.lines[offset]);
+    }
     let op = &chunk.code[offset];
     let opcode = OpCode::from(*op);
     match opcode {

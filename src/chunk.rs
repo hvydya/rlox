@@ -29,14 +29,16 @@ pub struct Chunk {
     pub code : Vec<u8>,
     pub count : usize,
     pub constants : ValueArray,
+    pub lines : Vec<usize>
 }
 
 pub fn init_chunk() -> Chunk {
-    Chunk { code: Vec::with_capacity(10), count: 0, constants: init_value_array() }
+    Chunk { code: Vec::with_capacity(10), count: 0, constants: init_value_array(), lines: Vec::new() }
 }
 
-pub fn write_chunk(c : &mut Chunk, code : u8) {
+pub fn write_chunk(c : &mut Chunk, code : u8, line : usize) {
     c.code.push(code);
+    c.lines.push(line);
     c.count += 1;
 }
 
