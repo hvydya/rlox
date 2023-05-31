@@ -32,21 +32,23 @@ pub struct Chunk {
     pub lines : Vec<usize>
 }
 
-pub fn init_chunk() -> Chunk {
-    Chunk { code: Vec::with_capacity(10), count: 0, constants: init_value_array(), lines: Vec::new() }
-}
+impl Chunk {
+    pub fn init_chunk() -> Chunk {
+        Chunk { code: Vec::with_capacity(10), count: 0, constants: init_value_array(), lines: Vec::new() }
+    }
 
-pub fn write_chunk(c : &mut Chunk, code : u8, line : usize) {
-    c.code.push(code);
-    c.lines.push(line);
-    c.count += 1;
-}
+    pub fn write_chunk(&mut self, code : u8, line : usize) {
+        self.code.push(code);
+        self.lines.push(line);
+        self.count += 1;
+    }
 
-pub fn free_chunk(c : &mut Chunk) {
-    *c = init_chunk();
-}
+    pub fn free_chunk(&mut self) {
+        *self = Chunk::init_chunk();
+    }
 
-pub fn add_constant(c : &mut Chunk, value : Value) -> usize {
-    write_value_array(&mut c.constants, value);
-    c.constants.count - 1
+    pub fn add_constant(&mut self, value : Value) -> usize {
+        write_value_array(&mut self.constants, value);
+        self.constants.count - 1
+    }
 }

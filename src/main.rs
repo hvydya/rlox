@@ -1,17 +1,29 @@
-use chunk::add_constant;
+use std::rc::Rc;
+use debug::disassemble_chunk;
+use vm::VM;
 
-use crate::{chunk::{init_chunk, write_chunk, free_chunk}, debug::disassemble_chunk};
+use crate::{chunk::{Chunk}};
 
 pub mod chunk;
 pub mod debug;
 pub mod value;
+pub mod vm;
 
 fn main() {
-    let mut x = init_chunk();
-    let i = add_constant(&mut x, 10);
-    write_chunk(&mut x, chunk::OpCode::OpConstant.into(), 123);
-    write_chunk(&mut x, i as u8, 123);
-    write_chunk(&mut x, chunk::OpCode::OpReturn.into(), 123);
-    disassemble_chunk(&x, "test chunk");
-    free_chunk(&mut x);
+    // TODO figure out how to pass mutable chunk around with Rc in picture.
+    // Use case is this:
+    // We need to pass a mutable reference around for all funcs
+    // Multiple vars will hold a mutable (or not) reference for the same chunk.
+    //
+    // As we build the interpreter we might not need the above requirements.
+    let mut chunk = Chunk::init_chunk();
+    let i = chunk.add_constant(10);
+    chunk.write_chunk(chunk::OpCode::OpConstant.into(), 123);
+    chunk.write_chunk(i as u8, 123);
+    chunk.write_chunk(chunk::OpCode::OpReturn.into(), 123);
+    disassemble_chunk(&chunk, "test chunk");
+    let rc = Rc::new(chunk);
+    let mut vm = VM::init_vm();
+    vm.interpret(&rc);
+    // chunk.free_chunk();
 }
