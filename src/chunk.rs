@@ -3,14 +3,31 @@ use crate::value::{ValueArray, init_value_array, write_value_array, Value};
 #[derive(Debug)]
 pub enum OpCode {
     OpReturn,
-    OpConstant
+    OpConstant,
+    OpNegate,
+    OpAdd,
+    OpSubtract,
+    OpMultiply,
+    OpDivide
+}
+
+pub enum BinaryOp {
+    Plus,
+    Minus,
+    Asterisk,
+    ForwardSlash
 }
 
 impl Into<u8> for OpCode {
     fn into(self) -> u8 {
         match self {
             OpCode::OpReturn => 0,
-            OpCode::OpConstant => 1
+            OpCode::OpConstant => 1,
+            OpCode::OpNegate => 2,
+            OpCode::OpAdd => 3,
+            OpCode::OpSubtract => 4,
+            OpCode::OpMultiply => 5,
+            OpCode::OpDivide => 6
         }
     } 
 }
@@ -20,6 +37,11 @@ impl From<u8> for OpCode {
         match value {
             0 => OpCode::OpReturn,
             1 => OpCode::OpConstant,
+            2 => OpCode::OpNegate,
+            3 => OpCode::OpAdd,
+            4 => OpCode::OpSubtract,
+            5 => OpCode::OpMultiply,
+            6 => OpCode::OpDivide,
             _ => panic!("no suitable opcode found for u8 : {value}")
         }
     }

@@ -19,7 +19,13 @@ pub fn disassemble_instruction(chunk : &Chunk, offset : usize) -> usize {
     let opcode = OpCode::from(*op);
     match opcode {
         OpCode::OpReturn => simple_instruction("OP_RETURN", offset),
-        OpCode::OpConstant => constant_instruction("OP_CONSTANT", chunk, offset)
+        OpCode::OpConstant => constant_instruction("OP_CONSTANT", chunk, offset),
+        OpCode::OpNegate => simple_instruction("OP_NEGATE", offset),
+        OpCode::OpAdd => simple_instruction("OP_ADD", offset),
+        OpCode::OpSubtract => simple_instruction("OP_SUBTRACT", offset),
+        OpCode::OpMultiply => simple_instruction("OP_MULTIPLY", offset),
+        OpCode::OpDivide => simple_instruction("OP_DIVIDE", offset),
+        // _ => panic!("Disassemble not implemented for {:?}", opcode)
     }
 }
 

@@ -17,11 +17,24 @@ fn main() {
     //
     // As we build the interpreter we might not need the above requirements.
     let mut chunk = Chunk::init_chunk();
-    let i = chunk.add_constant(10);
+    let mut i = chunk.add_constant(10);
     chunk.write_chunk(chunk::OpCode::OpConstant.into(), 123);
     chunk.write_chunk(i as u8, 123);
+
+    i = chunk.add_constant(20);
+    chunk.write_chunk(chunk::OpCode::OpConstant.into(), 123);
+    chunk.write_chunk(i as u8, 123);
+
+    chunk.write_chunk(chunk::OpCode::OpAdd.into(), 123);
+
+    i = chunk.add_constant(10);
+    chunk.write_chunk(chunk::OpCode::OpConstant.into(), 123);
+    chunk.write_chunk(i as u8, 123);
+
+    chunk.write_chunk(chunk::OpCode::OpDivide.into(), 123);
+
     chunk.write_chunk(chunk::OpCode::OpReturn.into(), 123);
-    disassemble_chunk(&chunk, "test chunk");
+    // disassemble_chunk(&chunk, "test chunk");
     let rc = Rc::new(chunk);
     let mut vm = VM::init_vm();
     vm.interpret(&rc);
