@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use crate::{chunk::{Chunk, OpCode}, value::{Value, print_value}, debug::disassemble_instruction};
+use crate::{chunk::{Chunk, OpCode}, value::{Value, print_value}, compiler::compile};
 
 pub struct VM {
     pub chunk : Option<Rc<Chunk>>,
@@ -32,6 +32,11 @@ impl VM {
 
     pub fn free_vm(&mut self) {
         self.reset_stack();
+    }
+
+    pub fn interpret_source(&mut self, source : String) -> InterpretResult {
+        compile(Rc::new(source));
+        InterpretResult::InterpretOk
     }
 
     pub fn interpret(&mut self, chunk : &Rc<Chunk>) -> InterpretResult {
